@@ -590,28 +590,11 @@ jobs:
     - name: Set VirusTotal Analysis URL for AltSpotC++
       if: ${{ env.VT_ENABLED == 'true' }}
       run: echo "VTALTSPOTC=${{ steps.vt-altspotc.outputs.analysis }}" >> $GITHUB_ENV
-
-    - name: Upload to Catbox (With Hash)
-      if: ${{ env.CATBOXHASH_ENABLED == 'true' }}
+    - name: Set Release URLs for GitHub
       run: |
-        RELEASEURL=$(curl -F "reqtype=fileupload" -F "userhash=${{ secrets.CATBOXHASH }}" -F "fileToUpload=@${{ env.patchedspotify }}" https://catbox.moe/user/api.php)
-        echo "Standard Release Download URL: $RELEASEURL"
-        echo "RELEASEURL=$RELEASEURL" >> $GITHUB_ENV
-    
-        RELEASEURLALTSTORE=$(curl -F "reqtype=fileupload" -F "userhash=${{ secrets.CATBOXHASH }}" -F "fileToUpload=@${{ env.altpatchedspotify }}" https://catbox.moe/user/api.php)
-        echo "AltStore Release Download URL: $RELEASEURLALTSTORE"
-        echo "RELEASEURLALTSTORE=$RELEASEURLALTSTORE" >> $GITHUB_ENV
-      
-    - name: Upload to Catbox (Without Hash)
-      if: ${{ env.CATBOXHASH_ENABLED == 'false' }}
-      run: |
-        RELEASEURL=$(curl -F "reqtype=fileupload" -F "fileToUpload=@${{ env.patchedspotify }}" https://catbox.moe/user/api.php)
-        echo "Standard Release Download URL: $RELEASEURL"
-        echo "RELEASEURL=$RELEASEURL" >> $GITHUB_ENV
-    
-        RELEASEURLALTSTORE=$(curl -F "reqtype=fileupload" -F "fileToUpload=@${{ env.altpatchedspotify }}" https://catbox.moe/user/api.php)
-        echo "AltStore Release Download URL: $RELEASEURLALTSTORE"
-        echo "RELEASEURLALTSTORE=$RELEASEURLALTSTORE" >> $GITHUB_ENV
+        echo "RELEASEURL=https://github.com/developerz83759/SpotC-Plus-Plus/releasesv${{ env.CHANGEVERSION }}/$(basename ${{ env.patchedspotify }})" >> $GITHUB_ENV
+        echo "RELEASEURLALTSTORE=https://github.com/developerz83759/SpotC-Plus-Plus/releasesv${{ env.CHANGEVERSION }}/$(basename ${{ env.altpatchedspotify }})" >> $GITHUB_ENV
+   
    
     - name: Extract and Prepare VirusTotal Links
       if: ${{ env.VT_ENABLED == 'true' }}
